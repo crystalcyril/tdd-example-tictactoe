@@ -383,7 +383,7 @@ public class TicTacToeEngine {
 	 * Returns the winner of this games
 	 * @return
 	 */
-	public Object getWinner() {
+	public Token getWinner() {
 		return winner;
 	}
 
