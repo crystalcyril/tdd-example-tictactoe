@@ -1,7 +1,7 @@
 tdd-example-tictactoe
 =====================
 
-TDD Example - Tic Tac Toe
+TDD Example - Tic Tac Toe game.
 
 
 
