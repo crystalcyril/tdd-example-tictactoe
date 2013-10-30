@@ -142,7 +142,7 @@ public class TicTacToeEngine {
 	 */
 	protected void updateInteralState() {
 		
-		updateGameState();
+		checkWinningConditions();
 		
 		updateNextToken();
 
@@ -152,9 +152,18 @@ public class TicTacToeEngine {
 	 * 
 	 * requirement_000600
 	 */
-	protected void updateGameState() {
+	protected void checkWinningConditions() {
 		
 		checkHorizontalWin();
+		
+		// short-circuit operation. stop checking if game is finished.
+		if (gameState == GameState.Complete) return;
+		
+		checkVerticalWin();
+		
+		if (gameState == GameState.Complete) return;
+		
+		checkDiagonalWin();
 		
 	}
 	
@@ -205,6 +214,126 @@ public class TicTacToeEngine {
 		}	// for each row.
 		
 	}
+	
+	
+	/**
+	 * Check for winning conditions for vertical lines (columns)
+	 * <p>
+	 * 
+	 * Requirement: requirement_000900
+	 */
+	protected void checkVerticalWin() {
+		
+		for (int x = 0; x < getWidth(); x++) {
+
+			Token potentialWinner = null;
+			
+			for (int y = 0; y < getHeight(); y++) {
+				
+				// stop checking the row if it is empty.
+				if (board[x][y] == null) {
+					potentialWinner = null;
+					break;
+				}
+				
+				// remember the first token we encountered.
+				if (potentialWinner == null) {
+					potentialWinner = board[x][y];
+					continue;
+				}
+				
+				// if we detect a line with different token, this line
+				// does not meet the winning criteria and we 
+				// skip to next row.
+				if (board[x][y] != potentialWinner) {
+					potentialWinner = null;
+					break;
+				}
+				
+			}	// for each column in a row
+			
+			// if this variable is non-null, the game is over and
+			// we stop checking further.
+			if (potentialWinner != null) {
+				this.gameState = GameState.Complete;
+				this.winner = potentialWinner;
+				break;
+			}
+			
+		}	// for each row.
+		
+	}
+	
+	/**
+	 * Check for diagonal winning conditions.
+	 * <p>
+	 * 
+	 * requirement_001100, requirement_001200
+	 */
+	protected void checkDiagonalWin() {
+		
+		for (int i = 0; i < 2; i++) {
+			
+			int x = -1;
+			int y = -1;
+			int xDiff = 0;
+			int yDiff = 0;
+			Token potentialWinner = null;
+
+			switch (i) {
+			case 0:
+				x = 0;
+				y = 0;
+				xDiff = 1;
+				yDiff = 1;
+				break;
+			case 1:
+				x = getWidth() - 1;
+				y = 0;
+				xDiff = -1;
+				yDiff = 1;
+				break;
+			default:
+				throw new RuntimeException("internal error");
+			}
+		
+			for (; x < getWidth() && y < getHeight() && x >= 0 && y >= 0; x += xDiff, y += yDiff) {
+				
+				// stop checking the row if it is empty.
+				if (board[x][y] == null) {
+					potentialWinner = null;
+					break;
+				}
+				
+				// remember the first token we encountered.
+				if (potentialWinner == null) {
+					potentialWinner = board[x][y];
+					continue;
+				}
+				
+				// if we detect a line with different token, this line
+				// does not meet the winning criteria and we 
+				// skip to next row.
+				if (board[x][y] != potentialWinner) {
+					potentialWinner = null;
+					break;
+				}				
+				
+			}
+			
+			// if this variable is non-null, the game is over and
+			// we stop checking further.
+			if (potentialWinner != null) {
+				this.gameState = GameState.Complete;
+				this.winner = potentialWinner;
+				break;
+			}
+			
+		}
+		
+	}
+	
+	
 	
 	public Token getToken(int x, int y) {
 

@@ -65,7 +65,7 @@ public class TicTacToeEngineTest {
 
 		assertEquals("game width", 3, game.getWidth());
 		assertEquals("game height", 3, game.getHeight());
-		
+
 	}
 
 	/**
@@ -172,7 +172,8 @@ public class TicTacToeEngineTest {
 			// WHEN user placed a token.
 			//
 			boolean placeResult = game.place(x, y);
-			assertFalse("place result " + x + "," + y + " should be", placeResult);
+			assertFalse("place result " + x + "," + y + " should be",
+					placeResult);
 
 			//
 			// THEN
@@ -218,14 +219,15 @@ public class TicTacToeEngineTest {
 
 		assertTokenAtCoordinatesShouldBe(1, 0, TicTacToeEngine.Token.CROSS);
 
-		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 0 }, { 1, 0 } });
+		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 0 },
+				{ 1, 0 } });
 
 		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
 
 		assertGameIsInProgress();
 
 	}
-	
+
 	/**
 	 * Win the top line.
 	 * <p>
@@ -242,22 +244,22 @@ public class TicTacToeEngineTest {
 	public void requirement_000600_WinTopHorizontalLine() {
 
 		// WHEN user placed a token.
-		user_successfully_placed_a_token_at(0, 0);	// O
-		
-		user_successfully_placed_a_token_at(0, 1);	// X
-		
-		user_successfully_placed_a_token_at(1, 0);	// O
-		
-		user_successfully_placed_a_token_at(1, 1);	// X
-		
-		user_successfully_placed_a_token_at(2, 0);	// O
-		
+		user_successfully_placed_a_token_at(0, 0); // O
+
+		user_successfully_placed_a_token_at(0, 1); // X
+
+		user_successfully_placed_a_token_at(1, 0); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(2, 0); // O
 
 		//
 		// THEN
 		//
 
-		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 }, { 2, 0 } });
+		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 0 },
+				{ 0, 1 }, { 1, 0 }, { 1, 1 }, { 2, 0 } });
 
 		// the token should not advance
 		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
@@ -265,7 +267,7 @@ public class TicTacToeEngineTest {
 		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
 
 	}
-	
+
 	/**
 	 * Win the top line.
 	 * <p>
@@ -282,22 +284,22 @@ public class TicTacToeEngineTest {
 	public void requirement_000700_WinBottomHorizontalLine() {
 
 		// WHEN user placed a token.
-		user_successfully_placed_a_token_at(0, 2);	// O
-		
-		user_successfully_placed_a_token_at(0, 1);	// X
-		
-		user_successfully_placed_a_token_at(1, 2);	// O
-		
-		user_successfully_placed_a_token_at(1, 1);	// X
-		
-		user_successfully_placed_a_token_at(2, 2);	// O
-		
+		user_successfully_placed_a_token_at(0, 2); // O
+
+		user_successfully_placed_a_token_at(0, 1); // X
+
+		user_successfully_placed_a_token_at(1, 2); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(2, 2); // O
 
 		//
 		// THEN
 		//
 
-		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 2 }, { 0, 1 }, { 1, 2 }, { 1, 1 }, { 2, 2 } });
+		assertBoardShouldBeEmptyExceptCoordinates(new int[][] { { 0, 2 },
+				{ 0, 1 }, { 1, 2 }, { 1, 1 }, { 2, 2 } });
 
 		// the token should not advance
 		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
@@ -305,9 +307,10 @@ public class TicTacToeEngineTest {
 		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
 
 	}
-	
+
 	/**
-	 * Win the top line.
+	 * User should not be able to make any further token placement if the game
+	 * is completed.
 	 * <p>
 	 * 
 	 * Game board state:
@@ -322,40 +325,192 @@ public class TicTacToeEngineTest {
 	public void requirement_000800_CannotPlayFurtherAfterGameIsCompleted() {
 
 		// WHEN user placed a token.
-		user_successfully_placed_a_token_at(0, 2);	// O
-		
-		user_successfully_placed_a_token_at(0, 1);	// X
-		
-		user_successfully_placed_a_token_at(1, 2);	// O
-		
-		user_successfully_placed_a_token_at(1, 1);	// X
-		
-		user_successfully_placed_a_token_at(2, 2);	// O
-		
+		user_successfully_placed_a_token_at(0, 2); // O
+
+		user_successfully_placed_a_token_at(0, 1); // X
+
+		user_successfully_placed_a_token_at(1, 2); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(2, 2); // O
+
 		// game is finished
-		
+
 		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
-		
+
 		//
 		// WHEN
 		//
 
 		boolean placeResult = game.place(0, 0);
-		
+
 		//
 		// THEN
 		//
 		assertFalse("place operation should fail", placeResult);
-		
+
 		// and...
 		assertTokenAtCoordinatesShouldBe(0, 0, null);
-		
+
 		// the token should not advance
 		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
 
-		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);		
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
 
-	}	
+	}
+
+	/**
+	 * Win the left most column. Boundary case test.
+	 * <p>
+	 * 
+	 * Game board state:
+	 * 
+	 * <pre>
+	 * O X .
+	 * O X .
+	 * O . .
+	 * </pre>
+	 */
+	@Test
+	public void requirement_000900_WinLeftmostColumn() {
+
+		// WHEN user placed a token.
+		user_successfully_placed_a_token_at(0, 0); // O
+
+		user_successfully_placed_a_token_at(1, 0); // X
+
+		user_successfully_placed_a_token_at(0, 1); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(0, 2); // O
+
+		// game is finished
+
+		//
+		// THEN
+		//
+		// the token should not advance
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
+
+	}
+
+	/**
+	 * Win the right most column. Boundary case test.
+	 * <p>
+	 * 
+	 * Game board state:
+	 * 
+	 * <pre>
+	 * . X O
+	 * . X O
+	 * . . O
+	 * </pre>
+	 */
+	@Test
+	public void requirement_001000_WinRightmostColumn() {
+
+		// WHEN user placed a token.
+		user_successfully_placed_a_token_at(2, 0); // O
+
+		user_successfully_placed_a_token_at(1, 0); // X
+
+		user_successfully_placed_a_token_at(2, 1); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(2, 2); // O
+
+		// game is finished
+
+		//
+		// THEN
+		//
+		// the token should not advance
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
+
+	}
+
+	/**
+	 * Win a diagonal line. Top left to bottom right (\)
+	 * <p>
+	 * 
+	 * Game board state:
+	 * 
+	 * <pre>
+	 * O . .
+	 * . O .
+	 * X X O
+	 * </pre>
+	 */
+	@Test
+	public void requirement_001100_Diagonal_TopLeftToBottomRight() {
+
+		// WHEN user placed a token.
+		user_successfully_placed_a_token_at(0, 0); // O
+
+		user_successfully_placed_a_token_at(0, 2); // X
+
+		user_successfully_placed_a_token_at(1, 1); // O
+
+		user_successfully_placed_a_token_at(1, 2); // X
+
+		user_successfully_placed_a_token_at(2, 2); // O
+
+		// game is finished
+
+		//
+		// THEN
+		//
+		// the token should not advance
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
+
+	}
+
+	/**
+	 * Win a diagonal line. Top left to bottom right (\)
+	 * <p>
+	 * 
+	 * Game board state:
+	 * 
+	 * <pre>
+	 * X X O
+	 * . O .
+	 * O . .
+	 * </pre>
+	 */
+	@Test
+	public void requirement_001200_Diagonal_TopRightToBottomLeft() {
+
+		// WHEN user placed a token.
+		user_successfully_placed_a_token_at(0, 2); // O
+
+		user_successfully_placed_a_token_at(0, 0); // X
+
+		user_successfully_placed_a_token_at(1, 1); // O
+
+		user_successfully_placed_a_token_at(1, 0); // X
+
+		user_successfully_placed_a_token_at(2, 0); // O
+
+		// game is finished
+
+		//
+		// THEN
+		//
+		// the token should not advance
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
+
+	}
 	
 	protected void assertTokenAtCoordinatesShouldBe(int x, int y,
 			Token expectedToken) {
@@ -370,8 +525,9 @@ public class TicTacToeEngineTest {
 
 		assertEquals("game state should be",
 				TicTacToeEngine.GameState.InProgress, game.getGameState());
-		
-		assertNull("there should be no winner for a in-progress game", game.getWinner());
+
+		assertNull("there should be no winner for a in-progress game",
+				game.getWinner());
 
 	}
 
@@ -431,20 +587,20 @@ public class TicTacToeEngineTest {
 
 	}
 
-	
 	protected void user_successfully_placed_a_token_at(int x, int y) {
-		
+
 		boolean placeResult = game.place(x, y);
-		assertTrue("place result at (" + x + "," + y + ") should be", placeResult);		
-		
+		assertTrue("place result at (" + x + "," + y + ") should be",
+				placeResult);
+
 	}
-	
 
 	protected void assertWinnerXHasWon(TicTacToeEngine.Token expectedWinner) {
-		
-		assertEquals("won game state should be", TicTacToeEngine.GameState.Complete, game.getGameState());
+
+		assertEquals("won game state should be",
+				TicTacToeEngine.GameState.Complete, game.getGameState());
 		assertEquals("winner should be", expectedWinner, game.getWinner());
-		
+
 	}
-	
+
 }
