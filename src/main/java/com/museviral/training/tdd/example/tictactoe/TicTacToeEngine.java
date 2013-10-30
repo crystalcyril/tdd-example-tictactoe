@@ -48,6 +48,8 @@ public class TicTacToeEngine {
 	 */
 	protected Token winner;
 	
+	protected int tokenCount;
+	
 	public TicTacToeEngine() {
 		super();
 
@@ -64,6 +66,9 @@ public class TicTacToeEngine {
 		
 		// no winner
 		winner = null;
+		
+		// reset number of token.
+		tokenCount = 0;
 
 	}
 
@@ -126,8 +131,11 @@ public class TicTacToeEngine {
 			return false;
 		}
 		
-
+		// place the token on the board.
 		board[x][y] = getNextToken();
+		
+		// increment number of token placed counter.
+		tokenCount++;
 		
 		updateInteralState();
 
@@ -164,6 +172,27 @@ public class TicTacToeEngine {
 		if (gameState == GameState.Complete) return;
 		
 		checkDiagonalWin();
+		
+		if (gameState == GameState.Complete) return;
+		
+		// check for draw conditions. must be called AFTER the 
+		// horizontal, vertical and diagonal checkings.
+		checkDraw();
+		
+	}
+	
+	/**
+	 * Check for game draw condition.
+	 * <p>
+	 * 
+	 * requirement_001700
+	 */
+	protected void checkDraw() {
+		
+		// if the board is full and no one win, the game is draw.
+		if (this.tokenCount == getHeight() * getWidth() && this.winner == null && gameState == GameState.InProgress) {
+			this.gameState = GameState.Complete;
+		}
 		
 	}
 	
@@ -356,6 +385,12 @@ public class TicTacToeEngine {
 	 */
 	public Object getWinner() {
 		return winner;
+	}
+
+	public void restart() {
+
+		this.initialize();
+		
 	}
 
 }

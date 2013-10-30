@@ -17,10 +17,10 @@ import com.museviral.training.tdd.example.tictactoe.TicTacToeEngine;
 import com.museviral.training.tdd.example.tictactoe.TicTacToeEngine.Token;
 
 /**
- * 
+ * Test cases for TicTacToeEngine.
  * 
  * @author Cyril
- * 
+ * @since 0.1.0
  */
 public class TicTacToeEngineTest {
 
@@ -31,7 +31,7 @@ public class TicTacToeEngineTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		game = new TicTacToeEngine();
+		game = createGame();
 	}
 
 	/**
@@ -511,6 +511,171 @@ public class TicTacToeEngineTest {
 		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
 
 	}
+
+	/**
+	 * Try to restart the game at the start of game.
+	 */
+	@Test
+	public void requirement_001300_RestartGameAfterGameIsJustCreated() {
+
+		game = createGame();
+		
+		game.restart();
+		
+		assertGameIsInProgress();
+
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertGameBoardIsEmpty();
+
+		assertEquals("game width", 3, game.getWidth());
+		assertEquals("game height", 3, game.getHeight());		
+		
+		user_successfully_placed_a_token_at(0, 0);
+		
+	}
+	
+	/**
+	 * Restart the game twice.
+	 */
+	@Test
+	public void requirement_001400_RestartGameTwice() {
+
+		for (int i = 0; i < 2; i++) {
+		
+			// restart multiple times.
+			game.restart();
+			
+			assertGameIsInProgress();
+	
+			assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+	
+			assertGameBoardIsEmpty();
+	
+			assertEquals("game width", 3, game.getWidth());
+			assertEquals("game height", 3, game.getHeight());		
+			
+			user_successfully_placed_a_token_at(0, 0);
+			
+		}
+		
+	}	
+	
+	/**
+	 * Restart the game after placing one move.
+	 */
+	@Test
+	public void requirement_001500_RestartGameAfterPlacingOneToken() {
+
+		//
+		// GIVEN THAT
+		//
+		assertGameIsInProgress();
+
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertGameBoardIsEmpty();
+
+		user_successfully_placed_a_token_at(0, 0);
+
+		//
+		// WHEN
+		//
+		game.restart();
+
+		//
+		// THEN
+		//
+		assertGameIsInProgress();
+
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertGameBoardIsEmpty();
+
+		user_successfully_placed_a_token_at(0, 0);
+
+	}
+	
+	/**
+	 * Restart the game after someone has won.
+	 */
+	@Test
+	public void requirement_001600_RestartGameAfterComplete() {
+
+		//
+		// GIVEN THAT
+		//
+		user_successfully_placed_a_token_at(0, 0); // O
+
+		user_successfully_placed_a_token_at(0, 1); // X
+
+		user_successfully_placed_a_token_at(1, 0); // O
+
+		user_successfully_placed_a_token_at(1, 1); // X
+
+		user_successfully_placed_a_token_at(2, 0); // O
+
+		assertWinnerXHasWon(TicTacToeEngine.Token.CIRCLE);
+
+		//
+		// WHEN
+		//
+		game.restart();
+
+		//
+		// THEN
+		//
+		assertGameIsInProgress();
+
+		assertNextMoveShouldBe(TicTacToeEngine.Token.CIRCLE);
+
+		assertGameBoardIsEmpty();
+
+		user_successfully_placed_a_token_at(0, 0);
+
+	}
+	
+	/**
+	 * Test the case the game is draw.
+	 * 
+	 * Game State:
+	 * <pre>
+	 * X-2 O-3 O-9
+	 * O-5 O-1 X-6
+	 * X-8 X-4 O-7
+	 * </pre>
+	 */
+	@Test
+	public void requirement_001700_DrawGame() {
+
+		//
+		// GIVEN THAT
+		//
+		user_successfully_placed_a_token_at(1, 1); // O (step 1)
+
+		user_successfully_placed_a_token_at(0, 0); // X
+
+		user_successfully_placed_a_token_at(1, 0); // O
+
+		user_successfully_placed_a_token_at(1, 2); // X
+
+		user_successfully_placed_a_token_at(0, 1); // O (step 5)
+
+		user_successfully_placed_a_token_at(2, 1); // X
+
+		user_successfully_placed_a_token_at(2, 2); // O
+
+		user_successfully_placed_a_token_at(0, 2); // X (step 8)
+
+		// boundary check
+		assertGameIsInProgress();
+		
+		user_successfully_placed_a_token_at(2, 0); // O
+
+		assertGameIsDraw();
+
+	}	
+	
 	
 	protected void assertTokenAtCoordinatesShouldBe(int x, int y,
 			Token expectedToken) {
@@ -529,6 +694,15 @@ public class TicTacToeEngineTest {
 		assertNull("there should be no winner for a in-progress game",
 				game.getWinner());
 
+	}
+	
+	protected void assertGameIsDraw() {
+		
+		assertEquals("game state should be",
+				TicTacToeEngine.GameState.Complete, game.getGameState());
+
+		assertNull("there should be no winner for a in-progress game",
+				game.getWinner());		
 	}
 
 	protected void assertNextMoveShouldBe(TicTacToeEngine.Token token) {
@@ -603,4 +777,13 @@ public class TicTacToeEngineTest {
 
 	}
 
+	/**
+	 * Create a new game without calling any methods on the game object.
+	 * 
+	 * @return
+	 */
+	protected TicTacToeEngine createGame() {
+		return new TicTacToeEngine();
+	}
+	
 }
