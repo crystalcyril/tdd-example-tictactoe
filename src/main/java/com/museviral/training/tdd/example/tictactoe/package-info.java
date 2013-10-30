@@ -2,6 +2,8 @@
  * 
  */
 /**
+ * Main package for tic tac toe engine.
+ * 
  * @author Cyril
  *
  */
